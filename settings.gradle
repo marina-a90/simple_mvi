@@ -1,0 +1,2 @@
+rootProject.name='simple mvi java'
+include ':app'
