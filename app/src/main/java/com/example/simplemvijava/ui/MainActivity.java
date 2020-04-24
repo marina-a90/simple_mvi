@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -115,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements DataStateListener
     }
 
     @Override
-    public void onDataStateChange(@Nullable DataState<?> dataState) {
+    public void onDataStateChange(DataState<?> dataState) {
         handleDataStateChange(dataState);
     }
 
