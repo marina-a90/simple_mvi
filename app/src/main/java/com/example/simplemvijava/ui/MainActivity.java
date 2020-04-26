@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.simplemvijava.R;
+import com.example.simplemvijava.viewModel.MainViewModel;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 

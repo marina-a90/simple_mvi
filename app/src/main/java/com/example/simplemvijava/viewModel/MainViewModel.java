@@ -1,4 +1,4 @@
-package com.example.simplemvijava.ui;
+package com.example.simplemvijava.viewModel;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
