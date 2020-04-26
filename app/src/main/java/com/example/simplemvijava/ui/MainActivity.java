@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements DataStateListener
     private void subscribeObservers() {
 
         // new Observer<DataState<MainViewState>>()
-        viewModel.getDataStateLiveData().observe(this, dataState -> {
+        viewModel.getBlogsLiveData().observe(this, dataState -> {
             if (dataState != null) {
                 Log.d(TAG, "DEBUG: onChanged: DataState: " + dataState.toString());
 
@@ -103,9 +102,11 @@ public class MainActivity extends AppCompatActivity implements DataStateListener
         // observe(this, new Observer<MainViewState>()
         viewModel.getViewStateLiveData().observe(this, mainViewState -> {
 
-            if (mainViewState.getBlogs() != null) {
-                Log.d(TAG, "DEBUG: Setting blog posts to RecyclerView: " + mainViewState.getBlogs());
-                blogListRecyclerAdapter.submitList(mainViewState.getBlogs());
+            List<Blog> blogsUI = mainViewState.getBlogs();
+
+            if (blogsUI != null) {
+                Log.d(TAG, "DEBUG: Setting blog posts to RecyclerView: " + blogsUI);
+                blogListRecyclerAdapter.submitList(blogsUI);
             }
         });
     }

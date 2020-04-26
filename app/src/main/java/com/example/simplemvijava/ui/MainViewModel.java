@@ -3,7 +3,6 @@ package com.example.simplemvijava.ui;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
@@ -25,6 +24,7 @@ public class MainViewModel extends ViewModel {
 
     private static List<Blog> blogList = new ArrayList<>();
 
+
     // the goal is
     // to have only 2 live data objects in the view model
     // 1. for the state events
@@ -37,7 +37,8 @@ public class MainViewModel extends ViewModel {
     // the view state to be observed
     private MutableLiveData<MainViewState> _viewState = new MutableLiveData<>();
 
-    private MutableLiveData<DataState<MainViewState>> dataStateLiveData = new MutableLiveData<>();
+
+    private MutableLiveData<DataState<MainViewState>> blogsLiveData = new MutableLiveData<>();
 
     public LiveData<MainViewState> getViewStateLiveData() {
         return _viewState;
@@ -47,38 +48,40 @@ public class MainViewModel extends ViewModel {
     // if it changes, detect the change and execute the code
     private LiveData<DataState<MainViewState>> dataState = Transformations.switchMap(_stateEvent, this::handleStateEvent);
 
-    public LiveData<DataState<MainViewState>> getDataStateLiveData() {
+    public LiveData<DataState<MainViewState>> getBlogsLiveData() {
         return dataState;
     }
 
 
     private LiveData<DataState<MainViewState>> handleStateEvent(MainStateEvent stateEvent) {
         if (stateEvent.getClass().equals(MainStateEvent.GetBlogsEvent.class)) {
-            dataStateLiveData.setValue(DataState.loading(true));
+            blogsLiveData.setValue(DataState.loading(true));
 
             new Timer().schedule(
                     new TimerTask() {
                         @Override
                         public void run() {
+                            // simulate api call
                             getBlogsList();
 
+                            // on api call success
                             // postValue because it's on Background Thread
-                            dataStateLiveData.postValue(DataState.data(null, new MainViewState(blogList)));
+                            blogsLiveData.postValue(DataState.data(null, new MainViewState(blogList)));
                         }
                     },
                     2000
             );
 
-            return dataStateLiveData;
+            return blogsLiveData;
         } else {
             return AbsentLiveData.create();
         }
     }
 
     public void setBlogListData(List<Blog> blogs) {
-        MainViewState update = getCurrentViewStateOrNew();
-        update.setBlogs(blogs);
-        _viewState.setValue(update);
+        MainViewState mainViewStateUpdate = getCurrentViewStateOrNew();
+        mainViewStateUpdate.setBlogs(blogs);
+        _viewState.setValue(mainViewStateUpdate);
     }
 
     private MainViewState getCurrentViewStateOrNew() {

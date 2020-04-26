@@ -8,7 +8,7 @@ import java.util.List;
 // single mutable live data object in a class that wraps everything together
 public class MainViewState {
 
-    // data model that seen in the view
+    // data model that's seen in the view
     private List<Blog> blogs = null;
 
     public MainViewState(List<Blog> blogs) {
