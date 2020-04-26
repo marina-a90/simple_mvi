@@ -5,9 +5,9 @@ import androidx.annotation.Nullable;
 
 public class DataState<T> {
 
-    private Event<String> message = null;
-    private Boolean loading = false;
-    private Event<T> data = null;
+    private Event<String> message;
+    private Boolean loading;
+    private Event<T> data;
 
     public DataState(Event<String> message, Boolean loading, Event<T> data) {
         this.message = message;

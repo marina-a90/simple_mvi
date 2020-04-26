@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,12 +28,9 @@ public class MainActivity extends AppCompatActivity implements DataStateListener
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    private Button button;
-
     private List<Blog> blogList = new ArrayList<>();
 
     private MainViewModel viewModel;
-    private RecyclerView recyclerView;
     private DataStateListener dataStateHandler;
     private BlogRecyclerAdapter blogListRecyclerAdapter;
 
@@ -43,14 +41,9 @@ public class MainActivity extends AppCompatActivity implements DataStateListener
 
         viewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        recyclerView = findViewById(R.id.recycler_view);
-
         setDataStateHandler();
 
         setUI();
-        button.setOnClickListener(this);
-
-        initRecyclerView();
 
         subscribeObservers();
     }
@@ -65,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements DataStateListener
     }
 
     private void initRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         blogListRecyclerAdapter = new BlogRecyclerAdapter();
@@ -72,13 +66,17 @@ public class MainActivity extends AppCompatActivity implements DataStateListener
     }
 
     private void setUI() {
-        button = findViewById(R.id.button);
+        Button button = findViewById(R.id.button);
+        button.setOnClickListener(this);
+
+        initRecyclerView();
     }
 
     // subscribe to all the observers in the view model
     private void subscribeObservers() {
+
         // new Observer<DataState<MainViewState>>()
-        viewModel.dataState.observe(this, dataState -> {
+        viewModel.getDataStateLiveData().observe(this, dataState -> {
             if (dataState != null) {
                 Log.d(TAG, "DEBUG: onChanged: DataState: " + dataState.toString());
 
@@ -87,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements DataStateListener
 
                 // handle Data<T>
                 if (dataState.getData() != null) {
-                    Log.d(TAG, "DEBUG: DataState: " + dataState.getData());
 
                     MainViewState mainViewState = dataState.getData().getContentIfNotHandled();
 
@@ -104,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements DataStateListener
         });
 
         // observe(this, new Observer<MainViewState>()
-        viewModel.getViewState().observe(this, mainViewState -> {
+        viewModel.getViewStateLiveData().observe(this, mainViewState -> {
 
             if (mainViewState.getBlogs() != null) {
                 Log.d(TAG, "DEBUG: Setting blog posts to RecyclerView: " + mainViewState.getBlogs());
@@ -122,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements DataStateListener
         if (dataState != null) {
             // Handle loading
             showProgressBar(dataState.getLoading());
+            Log.d(TAG, "DEBUG: dataState.getLoading() " + dataState.getLoading());
 
             // Handle Message
             if (dataState.getMessage() != null) {
@@ -146,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements DataStateListener
 
     @Override
     public void onClick(View v) {
+        Log.d(TAG, "clicked on button to load blogs");
         triggerGetBlogsEvent();
     }
 
