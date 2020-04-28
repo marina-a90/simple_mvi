@@ -1,4 +1,4 @@
-package com.example.simplemvijava.ui;
+package com.example.simplemvijava.viewmodel;
 
 import android.util.Log;
 

@@ -19,6 +19,7 @@ import com.example.simplemvijava.ui.state.MainStateEvent;
 import com.example.simplemvijava.ui.state.MainViewState;
 import com.example.simplemvijava.util.DataState;
 import com.example.simplemvijava.util.Event;
+import com.example.simplemvijava.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
