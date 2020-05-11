@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private MainPresenter presenter;
+    private Blog blog = new Blog();
 
     private BlogRecyclerAdapter blogListRecyclerAdapter;
 
@@ -34,7 +35,6 @@ public class MainActivity extends AppCompatActivity
 
         setUI();
     }
-
 
     private void setPresenter() {
         presenter = new MainPresenter(this);
@@ -58,9 +58,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClick(View v) {
         Log.d(TAG, "clicked on button to load blogs");
-        presenter.getBlogs();
+        getBlogs();
+        presenter.gettingBlogs();
     }
 
+    private void getBlogs() {
+        blog.getBlogs().observe(this, this::blogListFetched);
+    }
+
+    public void blogListFetched(List<Blog> blogs) {
+        presenter.onBlogsReceived(blogs);
+    }
 
     @Override
     public void showProgressBar(Boolean isVisible) {

@@ -1,11 +1,11 @@
 package com.example.simplemvijava.presenter;
 
 import com.example.simplemvijava.model.Blog;
-import com.example.simplemvijava.model.BlogRepositoryInterface;
+import com.example.simplemvijava.model.BlogPresenterInterface;
 
 import java.util.List;
 
-public class MainPresenter implements BlogRepositoryInterface {
+public class MainPresenter implements BlogPresenterInterface {
 
     public interface View {
         void showProgressBar(Boolean isVisible);
@@ -14,22 +14,19 @@ public class MainPresenter implements BlogRepositoryInterface {
 
     private View view;
 
-    private Blog blog;
-
     public MainPresenter(View view) {
         this.view = view;
-        blog = new Blog();
     }
 
     @Override
-    public void getBlogs() {
+    public void gettingBlogs() {
         view.showProgressBar(true);
-        blog.getBlogs(this);
     }
 
     @Override
-    public void onBlogsReceived(List<Blog> blogList) {
-        view.updateBlogList(blogList);
+    public void onBlogsReceived(List<Blog> blogs) {
+        view.updateBlogList(blogs);
         view.showProgressBar(false);
     }
+
 }
